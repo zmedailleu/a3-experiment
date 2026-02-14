@@ -4,6 +4,13 @@
 
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
+import * as randomData from "./shared/genRandomData.js"
+
+// const container = document.getElementById("container");
+
 console.log(d3);
+let dataPoints = randomData.getData();
+console.log(dataPoints);
+console.log(randomData.getBarsToCompare(dataPoints));
 
 </script>

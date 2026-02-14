@@ -7,19 +7,20 @@ function getRandomInt(min, max) {
 
 export function getData() {
     const numberOfDataPoints = getRandomInt(5, 10);
+    console.log(numberOfDataPoints)
 
-    let dataPoints = new Array;
+    let dataPoints = [];
 
-    for (let i = 0; i ++; i < numberOfDataPoints) {
-        dataPoints.append(getRandomInt(0, 100));
+    for (let i = 0; i < numberOfDataPoints; i++) {
+        dataPoints.push(getRandomInt(0, 100));
     }
 
     return dataPoints;
 }
 
 export function getBarsToCompare(dataPoints) {
-    let compare = new Array;
-    const maxVal = dataPoints.length();
+    let compare = [];
+    const maxVal = dataPoints.length;
 
     const first = getRandomInt(0, maxVal);
     let second = getRandomInt(0, maxVal);
@@ -27,6 +28,8 @@ export function getBarsToCompare(dataPoints) {
     if (first === second) {
         second = (second + 1) % maxVal;
     }
+    compare.push(dataPoints[first])
+    compare.push(dataPoints[second])
 
     return compare;
 };
