@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<div id="container"></div>
+<script type="module">
+
+import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+
+import * as randomData from "./shared/genRandomData.js";
+
+const container = document.getElementById("container");
+
+//test to make sure randomData is working
+console.log(d3);
+let dataPoints = randomData.getData();
+console.log(dataPoints);
+console.log(randomData.getBarsToCompare(dataPoints));
+
+//set dimensions
+const width = 540;
+const height = 400;
+const marginTop = 20;
+const marginRight = 20;
+const marginBottom = 30;
+const marginLeft = 40;
+
+const x = d3.scaleLinear()
+    .domain([0, dataPoints.length])
+    .range([marginLeft, width - marginRight]);
+
+const y = d3.scaleLinear()
+    .domain([0, 100])
+    .range([height - marginBottom, marginTop]);
+
+const svg = d3.create("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+svg.append("g")
+    .attr("transform", `translate(0,${height - marginBottom})`)
+    .call(d3.axisBottom(x).ticks(dataPoints.length));
+
+svg.append("g")
+    .attr("transform", `translate(${marginLeft},0)`)
+    .call(d3.axisLeft(y).ticks(1));
+
+svg.append("g")
+    .attr("fill", "blue")
+    .selectAll()
+    .data(dataPoints)
+    .join("rect")
+    .attr("x", (d, i) => x(i))
+    .attr("y", (d) => y(d))
+    .attr("height", (d) => y(0) - y(d))
+    .attr("width", ((width - marginLeft - marginRight)/dataPoints.length - 3))
+
+container.append(svg.node());
+
+
+
+
+
+</script>
