@@ -22,7 +22,7 @@ const height = 500;
 const pie = d3.pie()
     .sort(null)
     .value(d => d)
-    .padAngle(0.08)
+    // .padAngle(0.08) //use if not removing lines around pie chart
 
 const arc = d3.arc()
     .innerRadius(0)
@@ -38,6 +38,8 @@ svg.append("g")
     .selectAll()
     .data(pie(dataPoints))
     .join("path")
+    .attr("stroke", "black")
+    .attr("stroke-width", 3)
     .attr("fill", "#7188ad")
     .attr("d", arc);
 
