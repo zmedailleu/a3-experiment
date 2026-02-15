@@ -2,48 +2,70 @@
 <div id="container"></div>
 <script type="module">
 
-import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+    import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
-import * as randomData from "./shared/genRandomData.js";
+    import * as randomData from "./shared/genRandomData.js";
 
-const container = document.getElementById("container");
+    const container = document.getElementById("container");
 
-//test to make sure randomData is working
-console.log(d3);
-let dataPoints = randomData.getData();
-console.log(dataPoints);
-console.log(randomData.getBarsToCompare(dataPoints));
+    //test to make sure randomData is working
+    console.log(d3);
+    let dataPoints = randomData.getData();
+    let compareIndexes = randomData.getBarsToCompare(dataPoints);
+    console.log(dataPoints);
+    console.log(compareIndexes);
 
-//set dimensions
-const width = 900;
-const height = 500;
+    //set dimensions
+    const width = 540;
+    const height = 400;
+    const marginTop = 20;
+    const marginRight = 20;
+    const marginBottom = 30;
+    const marginLeft = 40;
 
-const pie = d3.pie()
-    .sort(null)
-    .value(d => d)
+    const x = d3.scaleLinear()
+        .domain([0, dataPoints.length])
+        .range([marginLeft, width - marginRight]);
 
-const arc = d3.arc()
-    .innerRadius(0)
-    .outerRadius(height / 2 - 4)
+    const y = d3.scaleLinear()
+        .domain([0, 100])
+        .range([height - marginBottom, marginTop]);
 
-const svg = d3.create("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .attr("viewBox", [-width / 2, -height / 2, width, height]);
+    const svg = d3.create("svg")
+        .attr("width", width)
+        .attr("height", height);
 
-svg.append("g")
-    .attr("stroke", "white")
-    .attr("stroke-width", 8)
-    .selectAll()
-    .data(pie(dataPoints))
-    .join("path")
-    .attr("fill", "blue")
-    .attr("d", arc);
+    svg.append("g")
+        .attr("transform", `translate(0,${height - marginBottom})`)
+        .call(d3.axisBottom(x).ticks(dataPoints.length).tickFormat(() => ""));
 
-container.append(svg.node());
+    svg.append("g")
+        .attr("transform", `translate(${marginLeft},0)`)
+        .call(d3.axisLeft(y).ticks(1));
 
+    const barWidth = ((width - marginLeft - marginRight)/dataPoints.length - 3);
 
+    svg.append("g")
+        .attr("fill", "blue")
+        .selectAll()
+        .data(dataPoints)
+        .join("rect")
+        .attr("x", (d, i) => x(i))
+        .attr("y", d => y(d))
+        .attr("height", d => y(0) - y(d))
+        .attr("width", barWidth)
 
+    const dataWithIndex = dataPoints.map((d, i) => ({value: d, index: i}))
+    //mark points to compare
+    svg.append("g")
+        .selectAll()
+        .data(dataWithIndex.filter((d, i) => compareIndexes.includes(d.index)))
+        .join("circle")
+        .attr("cx", (d, i) => (x(d.index) + (barWidth / 2)))
+        .attr("cy", d => y(d.value) + (y(0) - y(d.value)) / 2)
+        .attr("r", 10)
+        .style("fill", "red")
 
+    container.append(svg.node());
 
 </script>

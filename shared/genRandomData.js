@@ -28,8 +28,8 @@ export function getBarsToCompare(dataPoints) {
     if (first === second) {
         second = (second + 1) % maxVal;
     }
-    compare.push(dataPoints[first])
-    compare.push(dataPoints[second])
+    compare.push(first)
+    compare.push(second)
 
     return compare;
 };
