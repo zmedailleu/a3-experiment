@@ -59,7 +59,7 @@
     const barWidth = (width - marginLeft - marginRight);
 
     svg.append("g")
-        .attr("fill", "blue")
+        .attr("fill", "#7188ad")
         .selectAll()
         .data(stacked)
         .join("rect")
@@ -67,17 +67,27 @@
         .attr("stroke-width", 4)
         .attr("x", marginLeft)
         .attr("y", d => y(d.end))
-        .attr("height", d => y(0) - y(d.end - d.start))
+        .attr("rx", 1)
+        .attr("height", d => y(d.start) - y(d.end))
         .attr("width", barWidth)
 
     //mark points to compare
     svg.append("g")
         .selectAll()
-        .data(stacked.filter((d, i) => compareIndexes.includes(d.index)))
+        .data(stacked.filter(d => compareIndexes.includes(d.index)))
         .join("circle")
         .attr("cx", marginLeft + (barWidth / 2))
-        .attr("cy", d => y(d.end) + (y(0) - y(d.end - d.start)) / 2)
-        .attr("r", 10)
+        .attr("cy", d => y(d.end) + (y(d.start) - y(d.end)) / 2)
+        .attr("r", 7)
+        .style("fill", "red")
+
+    svg.append("g")
+        .selectAll()
+        .data(stacked.filter(d => compareIndexes.includes(d.index)))
+        .join("circle")
+        .attr("cx", marginLeft + (barWidth / 2))
+        .attr("cy", d => y(d.end) + (y(d.start) - y(d.end)) / 2)
+        .attr("r", 7)
         .style("fill", "red")
 
     container.append(svg.node());
