@@ -7,7 +7,6 @@ function getRandomInt(min, max) {
 
 export function getData() {
     const numberOfDataPoints = getRandomInt(5, 10);
-    console.log(numberOfDataPoints)
 
     let dataPoints = [];
 
