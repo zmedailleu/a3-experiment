@@ -43,15 +43,17 @@
         .attr("transform", `translate(${marginLeft},0)`)
         .call(d3.axisLeft(y).ticks(1));
 
-    const barWidth = ((width - marginLeft - marginRight)/dataPoints.length - 3);
+    const barWidth = ((width - marginLeft - marginRight)/dataPoints.length - 2);
 
     svg.append("g")
-        .attr("fill", "#7188ad")
+        .attr("fill", "#c2d4f2")
         .selectAll()
         .data(dataPoints)
         .join("rect")
         .attr("x", (d, i) => x(i))
         .attr("y", d => y(d))
+        .attr("stroke", "black")
+        .attr("stroke-width", 3)
         .attr("height", d => y(0) - y(d))
         .attr("width", barWidth)
 
