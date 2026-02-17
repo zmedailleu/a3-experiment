@@ -27,6 +27,7 @@ export function getBarsToCompare(dataPoints) {
     if (first === second) {
         second = (second + 1) % maxVal;
     }
+    
     compare.push(first)
     compare.push(second)
 
